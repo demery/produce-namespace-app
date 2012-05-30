@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "produce_fruits/new" do
+describe "produce/fruits/new" do
   before(:each) do
     assign(:fruit, stub_model(Produce::Fruit,
       :kind => "MyString",
