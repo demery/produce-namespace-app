@@ -1,0 +1,27 @@
+<h1>Listing produce_fruits</h1>
+
+<table>
+  <tr>
+    <th>Kind</th>
+    <th>Variety</th>
+    <th>Quantity</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @produce_fruits.each do |produce_fruit| %>
+  <tr>
+    <td><%= produce_fruit.kind %></td>
+    <td><%= produce_fruit.variety %></td>
+    <td><%= produce_fruit.quantity %></td>
+    <td><%= link_to 'Show', produce_fruit %></td>
+    <td><%= link_to 'Edit', edit_produce_fruit_path(produce_fruit) %></td>
+    <td><%= link_to 'Destroy', produce_fruit, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Fruit', new_produce_fruit_path %>

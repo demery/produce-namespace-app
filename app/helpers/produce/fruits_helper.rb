@@ -1,0 +1,2 @@
+module Produce::FruitsHelper
+end

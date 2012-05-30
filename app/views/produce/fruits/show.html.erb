@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Kind:</b>
+  <%= @produce_fruit.kind %>
+</p>
+
+<p>
+  <b>Variety:</b>
+  <%= @produce_fruit.variety %>
+</p>
+
+<p>
+  <b>Quantity:</b>
+  <%= @produce_fruit.quantity %>
+</p>
+
+
+<%= link_to 'Edit', edit_produce_fruit_path(@produce_fruit) %> |
+<%= link_to 'Back', produce_fruits_path %>
