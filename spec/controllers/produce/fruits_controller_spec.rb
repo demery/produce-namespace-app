@@ -49,14 +49,14 @@ describe Produce::FruitsController do
     it "assigns the requested fruit as @fruit" do
       fruit = Produce::Fruit.create! valid_attributes
       get :show, {:id => fruit.to_param}, valid_session
-      assigns(:fruit).should eq(fruit)
+      assigns(:produce_fruit).should eq(fruit)
     end
   end
 
   describe "GET new" do
     it "assigns a new fruit as @fruit" do
       get :new, {}, valid_session
-      assigns(:fruit).should be_a_new(Produce::Fruit)
+      assigns(:produce_fruit).should be_a_new(Produce::Fruit)
     end
   end
 
@@ -64,7 +64,7 @@ describe Produce::FruitsController do
     it "assigns the requested fruit as @fruit" do
       fruit = Produce::Fruit.create! valid_attributes
       get :edit, {:id => fruit.to_param}, valid_session
-      assigns(:fruit).should eq(fruit)
+      assigns(:produce_fruit).should eq(fruit)
     end
   end
 
@@ -72,18 +72,18 @@ describe Produce::FruitsController do
     describe "with valid params" do
       it "creates a new Produce::Fruit" do
         expect {
-          post :create, {:fruit => valid_attributes}, valid_session
+          post :create, {:produce_fruit => valid_attributes}, valid_session
         }.to change(Produce::Fruit, :count).by(1)
       end
 
       it "assigns a newly created fruit as @fruit" do
-        post :create, {:fruit => valid_attributes}, valid_session
-        assigns(:fruit).should be_a(Produce::Fruit)
-        assigns(:fruit).should be_persisted
+        post :create, {:produce_fruit => valid_attributes}, valid_session
+        assigns(:produce_fruit).should be_a(Produce::Fruit)
+        assigns(:produce_fruit).should be_persisted
       end
 
       it "redirects to the created fruit" do
-        post :create, {:fruit => valid_attributes}, valid_session
+        post :create, {:produce_fruit => valid_attributes}, valid_session
         response.should redirect_to(Produce::Fruit.last)
       end
     end
@@ -92,14 +92,14 @@ describe Produce::FruitsController do
       it "assigns a newly created but unsaved fruit as @fruit" do
         # Trigger the behavior that occurs when invalid params are submitted
         Produce::Fruit.any_instance.stub(:save).and_return(false)
-        post :create, {:fruit => {}}, valid_session
-        assigns(:fruit).should be_a_new(Produce::Fruit)
+        post :create, {:produce_fruit => {}}, valid_session
+        assigns(:produce_fruit).should be_a_new(Produce::Fruit)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Produce::Fruit.any_instance.stub(:save).and_return(false)
-        post :create, {:fruit => {}}, valid_session
+        post :create, {:produce_fruit => {}}, valid_session
         response.should render_template("new")
       end
     end
@@ -114,18 +114,18 @@ describe Produce::FruitsController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         Produce::Fruit.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, {:id => fruit.to_param, :fruit => {'these' => 'params'}}, valid_session
+        put :update, {:id => fruit.to_param, :produce_fruit => {'these' => 'params'}}, valid_session
       end
 
       it "assigns the requested fruit as @fruit" do
         fruit = Produce::Fruit.create! valid_attributes
-        put :update, {:id => fruit.to_param, :fruit => valid_attributes}, valid_session
-        assigns(:fruit).should eq(fruit)
+        put :update, {:id => fruit.to_param, :produce_fruit => valid_attributes}, valid_session
+        assigns(:produce_fruit).should eq(fruit)
       end
 
       it "redirects to the fruit" do
         fruit = Produce::Fruit.create! valid_attributes
-        put :update, {:id => fruit.to_param, :fruit => valid_attributes}, valid_session
+        put :update, {:id => fruit.to_param, :produce_fruit => valid_attributes}, valid_session
         response.should redirect_to(fruit)
       end
     end
@@ -135,15 +135,15 @@ describe Produce::FruitsController do
         fruit = Produce::Fruit.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Produce::Fruit.any_instance.stub(:save).and_return(false)
-        put :update, {:id => fruit.to_param, :fruit => {}}, valid_session
-        assigns(:fruit).should eq(fruit)
+        put :update, {:id => fruit.to_param, :produce_fruit => {}}, valid_session
+        assigns(:produce_fruit).should eq(fruit)
       end
 
       it "re-renders the 'edit' template" do
         fruit = Produce::Fruit.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Produce::Fruit.any_instance.stub(:save).and_return(false)
-        put :update, {:id => fruit.to_param, :fruit => {}}, valid_session
+        put :update, {:id => fruit.to_param, :produce_fruit => {}}, valid_session
         response.should render_template("edit")
       end
     end

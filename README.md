@@ -410,4 +410,139 @@ Now the specs run:
      
      Finished in 0.12522 seconds
      4 examples, 0 failures
+
+
+* <https://github.com/demery/produce-namespace-app/tarball/0.3-views>
+
+## Controller specs
+
+Before we do anything, we have to fix the controller spec's default attributes
+for the Product::Fruit class to work with our validations:
+
+      # spec/controllers/produce/fruits_controller_spec.rb
+      def valid_attributes
+        {
+          kind: 'apple',
+          variety: 'fugi'
+        }
+      end
+
+
+Now, 10 of the 16 specs fail:
+
+     $ rake spec:controllers
+     /Users/doug/.rvm/rubies/ruby-1.9.2-p318/bin/ruby -S rspec ./spec/controllers/produce/fruits_controller_spec.rb
+     .FFFFFFF.FF.F...
+     
+     Failures:
+     
+       1) Produce::FruitsController GET show assigns the requested fruit as @fruit
+          Failure/Error: assigns(:fruit).should eq(fruit)
+            
+            expected: #<Produce::Fruit id: 1, kind: "apple", variety: "fugi", quantity: nil, created_at: "2012-05-30 22:52:11", updated_at: "2012-05-30 22:52:11">
+                 got: nil
+            
+            (compared using ==)
+          # ./spec/controllers/produce/fruits_controller_spec.rb:52:in `block (3 levels) in <top (required)>'
+     
+       2) Produce::FruitsController GET new assigns a new fruit as @fruit
+          Failure/Error: assigns(:fruit).should be_a_new(Produce::Fruit)
+            expected nil to be a new Produce::Fruit(id: integer, kind: string, variety: string, quantity: integer, created_at: datetime, updated_at: datetime)
+          # ./spec/controllers/produce/fruits_controller_spec.rb:59:in `block (3 levels) in <top (required)>'
+     
+       3) Produce::FruitsController GET edit assigns the requested fruit as @fruit
+          Failure/Error: assigns(:fruit).should eq(fruit)
+            
+            expected: #<Produce::Fruit id: 1, kind: "apple", variety: "fugi", quantity: nil, created_at: "2012-05-30 22:52:11", updated_at: "2012-05-30 22:52:11">
+                 got: nil
+            
+            (compared using ==)
+          # ./spec/controllers/produce/fruits_controller_spec.rb:67:in `block (3 levels) in <top (required)>'
+     
+       4) Produce::FruitsController POST create with valid params creates a new Produce::Fruit
+          Failure/Error: expect {
+            count should have been changed by 1, but was changed by 0
+          # ./spec/controllers/produce/fruits_controller_spec.rb:74:in `block (4 levels) in <top (required)>'
+     
+       5) Produce::FruitsController POST create with valid params assigns a newly created fruit as @fruit
+          Failure/Error: assigns(:fruit).should be_a(Produce::Fruit)
+            expected nil to be a kind of Produce::Fruit(id: integer, kind: string, variety: string, quantity: integer, created_at: datetime, updated_at: datetime)
+          # ./spec/controllers/produce/fruits_controller_spec.rb:81:in `block (4 levels) in <top (required)>'
+     
+       6) Produce::FruitsController POST create with valid params redirects to the created fruit
+          Failure/Error: response.should redirect_to(Produce::Fruit.last)
+            Expected response to be a <:redirect>, but was <200>
+          # ./spec/controllers/produce/fruits_controller_spec.rb:87:in `block (4 levels) in <top (required)>'
+     
+       7) Produce::FruitsController POST create with invalid params assigns a newly created but unsaved fruit as @fruit
+          Failure/Error: assigns(:fruit).should be_a_new(Produce::Fruit)
+            expected nil to be a new Produce::Fruit(id: integer, kind: string, variety: string, quantity: integer, created_at: datetime, updated_at: datetime)
+          # ./spec/controllers/produce/fruits_controller_spec.rb:96:in `block (4 levels) in <top (required)>'
+     
+       8) Produce::FruitsController PUT update with valid params updates the requested fruit
+          Failure/Error: put :update, {:id => fruit.to_param, :fruit => {'these' => 'params'}}, valid_session
+            #<Produce::Fruit:0x007feed4040270> received :update_attributes with unexpected arguments
+              expected: ({"these"=>"params"})
+                   got: (nil)
+          # ./app/controllers/produce/fruits_controller.rb:62:in `block in update'
+          # ./app/controllers/produce/fruits_controller.rb:61:in `update'
+          # ./spec/controllers/produce/fruits_controller_spec.rb:117:in `block (4 levels) in <top (required)>'
+     
+       9) Produce::FruitsController PUT update with valid params assigns the requested fruit as @fruit
+          Failure/Error: assigns(:fruit).should eq(fruit)
+            
+            expected: #<Produce::Fruit id: 1, kind: "apple", variety: "fugi", quantity: nil, created_at: "2012-05-30 22:52:12", updated_at: "2012-05-30 22:52:12">
+                 got: nil
+            
+            (compared using ==)
+          # ./spec/controllers/produce/fruits_controller_spec.rb:123:in `block (4 levels) in <top (required)>'
+     
+       10) Produce::FruitsController PUT update with invalid params assigns the fruit as @fruit
+          Failure/Error: assigns(:fruit).should eq(fruit)
+            
+            expected: #<Produce::Fruit id: 1, kind: "apple", variety: "fugi", quantity: nil, created_at: "2012-05-30 22:52:12", updated_at: "2012-05-30 22:52:12">
+                 got: nil
+            
+            (compared using ==)
+          # ./spec/controllers/produce/fruits_controller_spec.rb:139:in `block (4 levels) in <top (required)>'
+     
+     Finished in 0.2105 seconds
+     16 examples, 10 failures
+     
+     Failed examples:
+     
+     rspec ./spec/controllers/produce/fruits_controller_spec.rb:49 # Produce::FruitsController GET show assigns the requested fruit as @fruit
+     rspec ./spec/controllers/produce/fruits_controller_spec.rb:57 # Produce::FruitsController GET new assigns a new fruit as @fruit
+     rspec ./spec/controllers/produce/fruits_controller_spec.rb:64 # Produce::FruitsController GET edit assigns the requested fruit as @fruit
+     rspec ./spec/controllers/produce/fruits_controller_spec.rb:73 # Produce::FruitsController POST create with valid params creates a new Produce::Fruit
+     rspec ./spec/controllers/produce/fruits_controller_spec.rb:79 # Produce::FruitsController POST create with valid params assigns a newly created fruit as @fruit
+     rspec ./spec/controllers/produce/fruits_controller_spec.rb:85 # Produce::FruitsController POST create with valid params redirects to the created fruit
+     rspec ./spec/controllers/produce/fruits_controller_spec.rb:92 # Produce::FruitsController POST create with invalid params assigns a newly created but unsaved fruit as @fruit
+     rspec ./spec/controllers/produce/fruits_controller_spec.rb:110 # Produce::FruitsController PUT update with valid params updates the requested fruit
+     rspec ./spec/controllers/produce/fruits_controller_spec.rb:120 # Produce::FruitsController PUT update with valid params assigns the requested fruit as @fruit
+     rspec ./spec/controllers/produce/fruits_controller_spec.rb:134 # Produce::FruitsController PUT update with invalid params assigns the fruit as @fruit
+     rake aborted!
+     /Users/doug/.rvm/rubies/ruby-1.9.2-p318/bin/ruby -S rspec ./spec/controllers/produce/fruits_controller_spec.rb failed
+     
+     Tasks: TOP => spec:controllers
+     (See full trace by running task with --trace)
+
+This can be fixed by changing `:fruit` to `:produce_fruit` in all cases like these:
+
+        put :update, {:id => fruit.to_param, :fruit => {}}, valid_session
+        assigns(:fruit).should eq(fruit)
+
+So that the both the parameters posted and the assigns read thus:
+
+        put :update, {:id => fruit.to_param, :produce_fruit => {}}, valid_session
+        assigns(:produce_fruit).should eq(fruit)
+ 
+Now running the controller spec, we have:
+
+     $ rake spec:controllers
+     /Users/doug/.rvm/rubies/ruby-1.9.2-p318/bin/ruby -S rspec ./spec/controllers/produce/fruits_controller_spec.rb
+     ................
+     
+     Finished in 0.22144 seconds
+     16 examples, 0 failures
      
