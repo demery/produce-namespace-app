@@ -84,6 +84,8 @@ The result:
 
 ## Change 1: Model spec
 
+* *git tag: 0.1-models-1* <https://github.com/demery/produce-namespace-app/tarball/0.1-models-1>
+
 Fruit needs some validations to test:
 
 
@@ -188,4 +190,44 @@ But the module doesn't even seem to have the method `table_name_prefix`:
      	from /Users/doug/.rvm/gems/ruby-1.9.2-p318@produce/gems/railties-3.1.4/lib/rails/commands.rb:40:in `<top (required)>'
      	from script/rails:6:in `require'
      	from script/rails:6:in `<main>'
-     1.9.2p318 :014 > 
+
+
+## Renaming the application
+
+What gives?
+
+The problem is the application is named 'Produce' and this is conflicting with
+the Produce namespace. So, let's rename the application to 'Grocer' in all
+these files:
+
+	   Rakefile
+	   app/views/layouts/application.html.erb
+	   config/application.rb
+	   config/environment.rb
+	   config/environments/development.rb
+	   config/environments/production.rb
+	   config/environments/test.rb
+	   config/initializers/secret_token.rb
+	   config/initializers/session_store.rb
+	   config/routes.rb
+
+And rename the directory too:
+
+     $ cd ..
+     # close all windows, apps etc. touching the produce dir
+     $ mv produce grocer
+     $ cd grocer
+
+Now rerun the model specs:
+
+     doug@machine:~/code/scratch/grocer:ruby-1.9.2@produce: (master)$ rake spec:models
+     /Users/doug/.rvm/rubies/ruby-1.9.2-p318/bin/ruby -S rspec ./spec/models/produce/fruit_spec.rb
+     ..DEPRECATION WARNING: Factory(:name) is deprecated; use FactoryGirl.create(:name) instead. (called from block (3 levels) in <module:Produce> at /Users/doug/code/scratch/grocer/spec/models/produce/fruit_spec.rb:26)
+     .......
+     
+     Finished in 0.08784 seconds
+     9 examples, 0 failures
+
+Excellent. All green.
+
+

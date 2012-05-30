@@ -1,4 +1,4 @@
-Produce::Application.routes.draw do
+Grocer::Application.routes.draw do
   namespace :produce do resources :fruits end
 
   # The priority is based upon order of creation:

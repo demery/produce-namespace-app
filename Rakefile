@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Produce::Application.load_tasks
+Grocer::Application.load_tasks
