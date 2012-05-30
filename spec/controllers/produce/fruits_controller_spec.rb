@@ -24,7 +24,10 @@ describe Produce::FruitsController do
   # Produce::Fruit. As you add validations to Produce::Fruit, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    {}
+    {
+      kind: 'apple',
+      variety: 'fugi'
+    }
   end
   
   # This should return the minimal set of values that should be in the session
