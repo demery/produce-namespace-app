@@ -23,7 +23,7 @@ module Produce
       end
 
       it "has a factory" do
-        Factory(:produce_fruit).should be_a(Fruit)
+        FactoryGirl.create(:produce_fruit).should be_a(Fruit)
       end
     end # context "(initialization)"
 
