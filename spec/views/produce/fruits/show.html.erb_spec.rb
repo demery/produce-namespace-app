@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "produce/fruits/show" do
   before(:each) do
-    @fruit = assign(:fruit, stub_model(Produce::Fruit,
+    @fruit = assign(:produce_fruit, stub_model(Produce::Fruit,
       :kind => "Kind",
       :variety => "Variety",
       :quantity => 1
