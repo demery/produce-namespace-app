@@ -84,7 +84,6 @@ The result:
 
 ## Change 1: Model spec
 
-* *git tag: 0.1-models-1* <https://github.com/demery/produce-namespace-app/tarball/0.1-models-1>
 
 Fruit needs some validations to test:
 
@@ -167,6 +166,8 @@ And create a standard model spec:
       end
     end
 
+* <https://github.com/demery/produce-namespace-app/tarball/0.1-models-1>
+
 And this doesn't work, because the application can't find the table named
 `fruits`.  It can't find the table, because the table is named
 `produce_fruits`.  The method `Produce::Fruits.table_name` should return
@@ -194,6 +195,7 @@ But the module doesn't even seem to have the method `table_name_prefix`:
 
 ## Renaming the application
 
+
 What gives?
 
 The problem is the application is named 'Produce' and this is conflicting with
@@ -218,16 +220,194 @@ And rename the directory too:
      $ mv produce grocer
      $ cd grocer
 
+* <https://github.com/demery/produce-namespace-app/tarball/0.2-models-2>
+
+> NOTE: I neglected to change 'Produce' to 'Grocer' in `config.ru` until a
+> later commit; you'll need to do that if you want to run the app.
+
 Now rerun the model specs:
 
-     doug@machine:~/code/scratch/grocer:ruby-1.9.2@produce: (master)$ rake spec:models
+     $ rake spec:models
      /Users/doug/.rvm/rubies/ruby-1.9.2-p318/bin/ruby -S rspec ./spec/models/produce/fruit_spec.rb
-     ..DEPRECATION WARNING: Factory(:name) is deprecated; use FactoryGirl.create(:name) instead. (called from block (3 levels) in <module:Produce> at /Users/doug/code/scratch/grocer/spec/models/produce/fruit_spec.rb:26)
-     .......
+     .........
      
      Finished in 0.08784 seconds
      9 examples, 0 failures
 
 Excellent. All green.
 
+## Fix the view specs
 
+Let's run the view specs now
+
+     $ rake spec:views
+     /Users/doug/.rvm/rubies/ruby-1.9.2-p318/bin/ruby -S rspec ./spec/views/produce/fruits/edit.html.erb_spec.rb ./spec/views/produce/fruits/index.html.erb_spec.rb ./spec/views/produce/fruits/new.html.erb_spec.rb ./spec/views/produce/fruits/show.html.erb_spec.rb
+     FFFF
+     
+     Failures:
+     
+       1) produce_fruits/edit renders the edit fruit form
+          Failure/Error: render
+          ActionView::MissingTemplate:
+            Missing template produce_fruits/edit with {:handlers=>[:erb, :builder, :coffee], :formats=>[:html, :text, :js, :css, :ics, :csv, :xml, :rss, :atom, :yaml, :multipart_form, :url_encoded_form, :json], :locale=>[:en, :en]}. Searched in:
+              * "/Users/doug/code/scratch/grocer/app/views"
+          # ./spec/views/produce/fruits/edit.html.erb_spec.rb:13:in `block (2 levels) in <top (required)>'
+     
+       2) produce_fruits/index renders a list of produce_fruits
+          Failure/Error: render
+          ActionView::MissingTemplate:
+            Missing template produce_fruits/index with {:handlers=>[:erb, :builder, :coffee], :formats=>[:html, :text, :js, :css, :ics, :csv, :xml, :rss, :atom, :yaml, :multipart_form, :url_encoded_form, :json], :locale=>[:en, :en]}. Searched in:
+              * "/Users/doug/code/scratch/grocer/app/views"
+          # ./spec/views/produce/fruits/index.html.erb_spec.rb:20:in `block (2 levels) in <top (required)>'
+     
+       3) produce_fruits/new renders new fruit form
+          Failure/Error: render
+          ActionView::MissingTemplate:
+            Missing template produce_fruits/new with {:handlers=>[:erb, :builder, :coffee], :formats=>[:html, :text, :js, :css, :ics, :csv, :xml, :rss, :atom, :yaml, :multipart_form, :url_encoded_form, :json], :locale=>[:en, :en]}. Searched in:
+              * "/Users/doug/code/scratch/grocer/app/views"
+          # ./spec/views/produce/fruits/new.html.erb_spec.rb:13:in `block (2 levels) in <top (required)>'
+     
+       4) produce_fruits/show renders attributes in <p>
+          Failure/Error: render
+          ActionView::MissingTemplate:
+            Missing template produce_fruits/show with {:handlers=>[:erb, :builder, :coffee], :formats=>[:html, :text, :js, :css, :ics, :csv, :xml, :rss, :atom, :yaml, :multipart_form, :url_encoded_form, :json], :locale=>[:en, :en]}. Searched in:
+              * "/Users/doug/code/scratch/grocer/app/views"
+          # ./spec/views/produce/fruits/show.html.erb_spec.rb:13:in `block (2 levels) in <top (required)>'
+     
+     Finished in 0.07256 seconds
+     4 examples, 4 failures
+     
+     Failed examples:
+     
+     rspec ./spec/views/produce/fruits/edit.html.erb_spec.rb:12 # produce_fruits/edit renders the edit fruit form
+     rspec ./spec/views/produce/fruits/index.html.erb_spec.rb:19 # produce_fruits/index renders a list of produce_fruits
+     rspec ./spec/views/produce/fruits/new.html.erb_spec.rb:12 # produce_fruits/new renders new fruit form
+     rspec ./spec/views/produce/fruits/show.html.erb_spec.rb:12 # produce_fruits/show renders attributes in <p>
+     rake aborted!
+     /Users/doug/.rvm/rubies/ruby-1.9.2-p318/bin/ruby -S rspec ./spec/views/produce/fruits/edit.html.erb_spec.rb ./spec/views/produce/fruits/index.html.erb_spec.rb ./spec/views/produce/fruits/new.html.erb_spec.rb ./spec/views/produce/fruits/show.html.erb_spec.rb failed
+
+### Fix the view spec paths
+
+The first problem is that the spec paths are in the form `produce_fruits/edit`:
+
+    describe "produce_fruits/edit" do
+    
+
+The should be  in the form `produce/fruits/edit`.  So let's fix that and change
+the four view specs in `spec/views/produce/fruits` (`edit`, `index`, `new`, `show`) so
+that the describe lines have the forms:
+
+    describe "produce/fruits/ACTION" do
+
+with appropriate values for `ACTION`.
+
+Now running the view specs gives:
+
+     $ rake spec:views
+     /Users/doug/.rvm/rubies/ruby-1.9.2-p318/bin/ruby -S rspec ./spec/views/produce/fruits/edit.html.erb_spec.rb ./spec/views/produce/fruits/index.html.erb_spec.rb ./spec/views/produce/fruits/new.html.erb_spec.rb ./spec/views/produce/fruits/show.html.erb_spec.rb
+     F.FF
+     
+     Failures:
+     
+       1) produce/fruits/edit renders the edit fruit form
+          Failure/Error: render
+          ActionView::Template::Error:
+            undefined method `model_name' for NilClass:Class
+          # ./app/views/produce/fruits/_form.html.erb:1:in `_app_views_produce_fruits__form_html_erb__1144309606946020442_70122927594040'
+          # ./app/views/produce/fruits/edit.html.erb:3:in `_app_views_produce_fruits_edit_html_erb___3850857416275803114_70122934354380'
+          # ./spec/views/produce/fruits/edit.html.erb_spec.rb:13:in `block (2 levels) in <top (required)>'
+     
+       2) produce/fruits/new renders new fruit form
+          Failure/Error: render
+          ActionView::Template::Error:
+            undefined method `model_name' for NilClass:Class
+          # ./app/views/produce/fruits/_form.html.erb:1:in `_app_views_produce_fruits__form_html_erb__1144309606946020442_70122927594040'
+          # ./app/views/produce/fruits/new.html.erb:3:in `_app_views_produce_fruits_new_html_erb__2703950448170892510_70122926653260'
+          # ./spec/views/produce/fruits/new.html.erb_spec.rb:13:in `block (2 levels) in <top (required)>'
+     
+       3) produce/fruits/show renders attributes in <p>
+          Failure/Error: render
+          ActionView::Template::Error:
+            undefined method `kind' for nil:NilClass
+          # ./app/views/produce/fruits/show.html.erb:5:in `_app_views_produce_fruits_show_html_erb__2956242856153233586_70122926433080'
+          # ./spec/views/produce/fruits/show.html.erb_spec.rb:13:in `block (2 levels) in <top (required)>'
+     
+     Finished in 0.13131 seconds
+     4 examples, 3 failures
+     
+     Failed examples:
+     
+     rspec ./spec/views/produce/fruits/edit.html.erb_spec.rb:12 # produce/fruits/edit renders the edit fruit form
+     rspec ./spec/views/produce/fruits/new.html.erb_spec.rb:12 # produce/fruits/new renders new fruit form
+     rspec ./spec/views/produce/fruits/show.html.erb_spec.rb:12 # produce/fruits/show renders attributes in <p>
+     rake aborted!
+     /Users/doug/.rvm/rubies/ruby-1.9.2-p318/bin/ruby -S rspec ./spec/views/produce/fruits/edit.html.erb_spec.rb ./spec/views/produce/fruits/index.html.erb_spec.rb ./spec/views/produce/fruits/new.html.erb_spec.rb ./spec/views/produce/fruits/show.html.erb_spec.rb failed
+
+That's progress, but we still have a problem.
+
+### Fix view spec `assign` calls
+
+The next problem has to do with divergent view assignment variables between
+Rails and rspec. 
+
+Rails assigns fruits to `@produce_fruit`:
+
+    # app/views/produce/fruits/_form.html.erb
+    <p>
+      <b>Kind:</b>
+      <%= @produce_fruit.kind %>
+    </p>
+
+The spec generator uses `:fruit`:
+
+    # spec/views/produce/fruits/edit.html.erb_spec.rb
+    describe "produce/fruits/edit" do
+      before(:each) do
+        @fruit = assign(:fruit, stub_model(Produce::Fruit,
+          :kind => "MyString",
+          :variety => "MyString",
+          :quantity => 1
+        ))
+      end
+      # ...
+    end
+
+Let's fix the three specs, `show`, `edit`, and `new`, changing `:fruit` to
+`:produce_fruit`.  Note that `index` uses the `:produce_fruits` assignment
+operator already.
+
+This gets us closer; however, the css matchers in the `edit` and `new` specs do
+not work.  Rails is rendering inputs with full, namespaced id's and names,
+thus:
+
+      <div class="field">
+        <label for="produce_fruit_kind">Kind</label><br />
+        <input id="produce_fruit_kind" name="produce_fruit[kind]" size="30" type="text" />
+      </div>
+
+The view specs are looking for id's and names **without** the `produce_` prefix:
+
+    assert_select "form", :action => produce_fruits_path(@fruit), :method => "post" do
+      assert_select "input#fruit_kind", :name => "fruit[kind]"
+      assert_select "input#fruit_variety", :name => "fruit[variety]"
+      assert_select "input#fruit_quantity", :name => "fruit[quantity]"
+    end
+
+
+Change the `new` and `edit` specs thus:
+
+    assert_select "form", :action => produce_fruits_path, :method => "post" do
+      assert_select "input#produce_fruit_kind", :name => "produce_fruit[kind]"
+      assert_select "input#produce_fruit_variety", :name => "produce_fruit[variety]"
+      assert_select "input#produce_fruit_quantity", :name => "produce_fruit[quantity]"
+    end
+
+Now the specs run:
+
+     $ rake spec:views
+     /Users/doug/.rvm/rubies/ruby-1.9.2-p318/bin/ruby -S rspec ./spec/views/produce/fruits/edit.html.erb_spec.rb ./spec/views/produce/fruits/index.html.erb_spec.rb ./spec/views/produce/fruits/new.html.erb_spec.rb ./spec/views/produce/fruits/show.html.erb_spec.rb
+     ....
+     
+     Finished in 0.12522 seconds
+     4 examples, 0 failures
+     
