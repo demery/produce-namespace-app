@@ -545,4 +545,5 @@ Now running the controller spec, we have:
      
      Finished in 0.22144 seconds
      16 examples, 0 failures
-     
+
+* <https://github.com/demery/produce-namespace-app/tarball/0.4-controllers>
