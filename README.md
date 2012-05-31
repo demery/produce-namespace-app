@@ -1,7 +1,27 @@
-# What?
+# Namedspaced model/controllers and rspec
 
-This is a toy application  I created to figure out how to user rspec-rails with
-a namespaced app.
+I'm learning about namespaces in Rails and wanted to see how to work with
+namespaces and rspec.  As a quick intro, I built a test Rails 3.1 application,
+installed rspec-rails with factory\_girl\_rails, and created a scaffold.  
+
+And just about none of the specs passed.  So the following is a log of me
+working through gettting rspec-generated specs to work with my namespaced model
+and controller.
+
+The short of it was that the rspec generator made the wrong choices for
+assigning variables and naming paths.  Where Rails would name a variable
+`@namespace_model`, rspec would generate a spec with `assigns(:model)`.  Where
+the path was `/namespace/model`, rspec's path would be `/namespace_model`.
+Rspec was not completely consistent. For example, the index view specs assigned
+instances to `:namespace_models`.
+
+I haven't tried this out multiple times to see whether there's some version 
+incompatibility (rspec 2.10.0 and Rails 3.1.4), or whether I made some mistake
+in setting up the app with rspec.  I did create two apps and had the same
+problems each time. So, if it was me, I'm making the same mistake multiple
+times.  And, I'm not complaining.  I saw using a scaffold as quick and dirty
+way to learn about testing namespaces with rspec, and it worked.  I learned a
+lot.  A lot more than I would have it had worked out of the box.
 
 # What I did
 
