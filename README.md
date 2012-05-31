@@ -547,3 +547,87 @@ Now running the controller spec, we have:
      16 examples, 0 failures
 
 * <https://github.com/demery/produce-namespace-app/tarball/0.4-controllers>
+
+## Routing
+
+Next, step is to fix the routing. Seven of seven routing specs fail:
+
+     $ rake spec:routing
+     /Users/doug/.rvm/rubies/ruby-1.9.2-p318/bin/ruby -S rspec ./spec/routing/produce/fruits_routing_spec.rb
+     FFFFFFF
+     
+     Failures:
+     
+       1) Produce::FruitsController routing routes to #index
+          Failure/Error: get("/produce_fruits").should route_to("produce_fruits#index")
+            No route matches "/produce_fruits"
+          # ./spec/routing/produce/fruits_routing_spec.rb:7:in `block (3 levels) in <top (required)>'
+     
+       2) Produce::FruitsController routing routes to #new
+          Failure/Error: get("/produce_fruits/new").should route_to("produce_fruits#new")
+            No route matches "/produce_fruits/new"
+          # ./spec/routing/produce/fruits_routing_spec.rb:11:in `block (3 levels) in <top (required)>'
+     
+       3) Produce::FruitsController routing routes to #show
+          Failure/Error: get("/produce_fruits/1").should route_to("produce_fruits#show", :id => "1")
+            No route matches "/produce_fruits/1"
+          # ./spec/routing/produce/fruits_routing_spec.rb:15:in `block (3 levels) in <top (required)>'
+     
+       4) Produce::FruitsController routing routes to #edit
+          Failure/Error: get("/produce_fruits/1/edit").should route_to("produce_fruits#edit", :id => "1")
+            No route matches "/produce_fruits/1/edit"
+          # ./spec/routing/produce/fruits_routing_spec.rb:19:in `block (3 levels) in <top (required)>'
+     
+       5) Produce::FruitsController routing routes to #create
+          Failure/Error: post("/produce_fruits").should route_to("produce_fruits#create")
+            No route matches "/produce_fruits"
+          # ./spec/routing/produce/fruits_routing_spec.rb:23:in `block (3 levels) in <top (required)>'
+     
+       6) Produce::FruitsController routing routes to #update
+          Failure/Error: put("/produce_fruits/1").should route_to("produce_fruits#update", :id => "1")
+            No route matches "/produce_fruits/1"
+          # ./spec/routing/produce/fruits_routing_spec.rb:27:in `block (3 levels) in <top (required)>'
+     
+       7) Produce::FruitsController routing routes to #destroy
+          Failure/Error: delete("/produce_fruits/1").should route_to("produce_fruits#destroy", :id => "1")
+            No route matches "/produce_fruits/1"
+          # ./spec/routing/produce/fruits_routing_spec.rb:31:in `block (3 levels) in <top (required)>'
+     
+     Finished in 0.00502 seconds
+     7 examples, 7 failures
+     
+     Failed examples:
+     
+     rspec ./spec/routing/produce/fruits_routing_spec.rb:6 # Produce::FruitsController routing routes to #index
+     rspec ./spec/routing/produce/fruits_routing_spec.rb:10 # Produce::FruitsController routing routes to #new
+     rspec ./spec/routing/produce/fruits_routing_spec.rb:14 # Produce::FruitsController routing routes to #show
+     rspec ./spec/routing/produce/fruits_routing_spec.rb:18 # Produce::FruitsController routing routes to #edit
+     rspec ./spec/routing/produce/fruits_routing_spec.rb:22 # Produce::FruitsController routing routes to #create
+     rspec ./spec/routing/produce/fruits_routing_spec.rb:26 # Produce::FruitsController routing routes to #update
+     rspec ./spec/routing/produce/fruits_routing_spec.rb:30 # Produce::FruitsController routing routes to #destroy
+     rake aborted!
+     /Users/doug/.rvm/rubies/ruby-1.9.2-p318/bin/ruby -S rspec ./spec/routing/produce/fruits_routing_spec.rb failed
+
+
+This is fixed by changing the path and controller values.  The rspec generator has guessed
+`produce_fruits`:
+
+    it "routes to #destroy" do
+      delete("/produce_fruits/1").should route_to("produce_fruits#destroy", :id => "1")
+    end
+
+The correct path and controller name is `produce/fruits`:
+
+    it "routes to #destroy" do
+      delete("/produce/fruits/1").should route_to("produce/fruits#destroy", :id => "1")
+    end
+
+Changing these values for the seven CRUD routes yields seven passing specs:
+
+     $ rake spec:routing
+     /Users/doug/.rvm/rubies/ruby-1.9.2-p318/bin/ruby -S rspec ./spec/routing/produce/fruits_routing_spec.rb
+     .......
+     
+     Finished in 0.01041 seconds
+     7 examples, 0 failures
+     
