@@ -393,10 +393,10 @@ The spec generator uses `:fruit`:
     end
 
 Let's fix the three specs, `show`, `edit`, and `new`, changing `:fruit` to
-`:produce_fruit`.  Note that `index` uses the `:produce_fruits` assignment
-operator already.
+`:produce_fruit`.  Note that `index` already assigns the list of fruits to
+`:produce_fruits`.
 
-This gets us closer; however, the css matchers in the `edit` and `new` specs do
+This gets us closer; however, the CSS matchers in the `edit` and `new` specs do
 not work.  Rails is rendering inputs with full, namespaced id's and names,
 thus:
 
@@ -443,7 +443,7 @@ for the Product::Fruit class to work with our validations:
       def valid_attributes
         {
           kind: 'apple',
-          variety: 'fugi'
+          variety: 'fuji'
         }
       end
 
@@ -459,7 +459,7 @@ Now, 10 of the 16 specs fail:
        1) Produce::FruitsController GET show assigns the requested fruit as @fruit
           Failure/Error: assigns(:fruit).should eq(fruit)
             
-            expected: #<Produce::Fruit id: 1, kind: "apple", variety: "fugi", quantity: nil, created_at: "2012-05-30 22:52:11", updated_at: "2012-05-30 22:52:11">
+            expected: #<Produce::Fruit id: 1, kind: "apple", variety: "fuji", quantity: nil, created_at: "2012-05-30 22:52:11", updated_at: "2012-05-30 22:52:11">
                  got: nil
             
             (compared using ==)
@@ -473,7 +473,7 @@ Now, 10 of the 16 specs fail:
        3) Produce::FruitsController GET edit assigns the requested fruit as @fruit
           Failure/Error: assigns(:fruit).should eq(fruit)
             
-            expected: #<Produce::Fruit id: 1, kind: "apple", variety: "fugi", quantity: nil, created_at: "2012-05-30 22:52:11", updated_at: "2012-05-30 22:52:11">
+            expected: #<Produce::Fruit id: 1, kind: "apple", variety: "fuji", quantity: nil, created_at: "2012-05-30 22:52:11", updated_at: "2012-05-30 22:52:11">
                  got: nil
             
             (compared using ==)
@@ -511,7 +511,7 @@ Now, 10 of the 16 specs fail:
        9) Produce::FruitsController PUT update with valid params assigns the requested fruit as @fruit
           Failure/Error: assigns(:fruit).should eq(fruit)
             
-            expected: #<Produce::Fruit id: 1, kind: "apple", variety: "fugi", quantity: nil, created_at: "2012-05-30 22:52:12", updated_at: "2012-05-30 22:52:12">
+            expected: #<Produce::Fruit id: 1, kind: "apple", variety: "fuji", quantity: nil, created_at: "2012-05-30 22:52:12", updated_at: "2012-05-30 22:52:12">
                  got: nil
             
             (compared using ==)
@@ -520,7 +520,7 @@ Now, 10 of the 16 specs fail:
        10) Produce::FruitsController PUT update with invalid params assigns the fruit as @fruit
           Failure/Error: assigns(:fruit).should eq(fruit)
             
-            expected: #<Produce::Fruit id: 1, kind: "apple", variety: "fugi", quantity: nil, created_at: "2012-05-30 22:52:12", updated_at: "2012-05-30 22:52:12">
+            expected: #<Produce::Fruit id: 1, kind: "apple", variety: "fuji", quantity: nil, created_at: "2012-05-30 22:52:12", updated_at: "2012-05-30 22:52:12">
                  got: nil
             
             (compared using ==)
@@ -570,7 +570,7 @@ Now running the controller spec, we have:
 
 ## Routing
 
-Next, step is to fix the routing. Seven of seven routing specs fail:
+Next step is to fix the routing. Seven of seven routing specs fail:
 
      $ rake spec:routing
      /Users/doug/.rvm/rubies/ruby-1.9.2-p318/bin/ruby -S rspec ./spec/routing/produce/fruits_routing_spec.rb
